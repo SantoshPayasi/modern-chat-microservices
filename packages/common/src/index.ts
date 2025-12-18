@@ -6,4 +6,5 @@ export * from "./http/async-handler";
 export * from "./http/internal-auth";
 export * from "./events/event-types";
 export * from "./events/auth-event";
+export * from "./events/user-event";
 export * from "./env";
