@@ -79,5 +79,28 @@ export const authProxyService = {
             return handleAxiosError(error);
         }
     },
+    async login(payload: LoginPayload): Promise<AuthTokens> {
+        try {
+            const response = await client.post<AuthTokens>('/auth/login', payload, authHeader);
+            return response.data;
+        } catch (error) {
+            return handleAxiosError(error);
+        }
+    },
+    async refreshToken(payload: RefreshPayload): Promise<AuthTokens> {
+        try {
+            const response = await client.post<AuthTokens>('/auth/refresh-token', payload, authHeader);
+            return response.data;
+        } catch (error) {
+            return handleAxiosError(error);
+        }
+    },
+    async revokeRefreshToken(payload: RevokePayload): Promise<void> {
+        try {
+            await client.post('/auth/revoke-token', payload, authHeader);
+        } catch (error) {
+            return handleAxiosError(error);
+        }
+    }
 
 }
