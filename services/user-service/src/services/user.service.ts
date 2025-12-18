@@ -1,4 +1,3 @@
-import { sequelize } from "@/db";
 import type { UserRepository } from "@/repository/user.repositories";
 import { User, CreateUserInput } from "@/types/user"
 import { userRepository } from "@/repository/user.repositories";

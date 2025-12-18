@@ -13,7 +13,9 @@ export const createApp = (): Application => {
     app.use(cors({ origin: "*", credentials: true }));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use(createInternalAuthMiddleware(env.INTERNAL_AUTH_TOKEN));
+    app.use(createInternalAuthMiddleware(env.INTERNAL_AUTH_TOKEN, {
+        exemptPaths: ["/auth/register", "/auth/login"]
+    }));
     registerRoutes(app);
     app.use((_request, response) => {
         response.status(404).json({ message: "Not Found" });
