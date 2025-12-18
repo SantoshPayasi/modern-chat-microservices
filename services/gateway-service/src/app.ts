@@ -3,8 +3,6 @@ import cors from "cors";
 import helmet from "helmet";
 import { errorHandler } from "@/middlewares/error-handler";
 import { registerRoutes } from "@/routes";
-import { createInternalAuthMiddleware } from "@chat-app/common";
-import { env } from "./config/env";
 
 export const createApp = (): Application => {
     const app = express();
