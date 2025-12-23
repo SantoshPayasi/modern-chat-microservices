@@ -6,7 +6,8 @@ const envSchema = z.object({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     GATEWAY_PORT: z.coerce.number().int().min(0).max(65535).default(4000),
     AUTH_SERVICE_URL: z.string().url().default("http://localhost:4003"),
-    INTERNAL_AUTH_TOKEN: z.string().default("secret"),
+    USER_SERVICE_URL:z.string().url().default("http://localhost:4004"),
+    INTERNAL_API_TOKEN: z.string().default("secret"),
 })
 
 type envType = z.infer<typeof envSchema>;

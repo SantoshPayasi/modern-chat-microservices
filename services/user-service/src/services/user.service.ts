@@ -3,6 +3,7 @@ import { User, CreateUserInput } from "@/types/user"
 import { userRepository } from "@/repository/user.repositories";
 import { AuthUserRegisteredPayload, HttpError } from "@chat-app/common";
 import { UniqueConstraintError } from "sequelize";
+import { publishUserCreatedEvent } from "@/messaging/event-publisher";
 
 
 class UserService {
@@ -24,7 +25,13 @@ class UserService {
         try {
             const user = await this.repository.create(data);
 
-            // TODO: need to publish user created event
+            void publishUserCreatedEvent({
+                id: user.email,
+                email:user.email,
+                createdAt:user.createdAt,
+                displayName:user.displayName
+            })
+
             return user;
         } catch (error) {
             if (error instanceof UniqueConstraintError) {
@@ -48,6 +55,12 @@ class UserService {
 
     async syncFromAuthUser(payload: AuthUserRegisteredPayload): Promise<User> {
         const user = await this.repository.upsertFromAuthEvent(payload);
+         void publishUserCreatedEvent({
+                id: user.email,
+                email:user.email,
+                createdAt:user.createdAt,
+                displayName:user.displayName
+            })
         return user;
     }
 }

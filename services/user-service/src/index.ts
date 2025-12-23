@@ -4,12 +4,16 @@ import { env } from "./config/env";
 import { logger } from "./utils/logger";
 import { initializeDatabase } from "./db/sequelize";
 import { startAuthConsumer } from "./messaging/auth-consumer";
+import { closeMessaging, initMessaging } from "./messaging/event-publisher";
 
 
 const main = async () => {
     try {
         await initializeDatabase();
         await startAuthConsumer();
+        await initMessaging();
+
+
         const app = createApp();
         const server = createServer(app);
 
@@ -23,6 +27,7 @@ const main = async () => {
         const shutdown = async () => {
             logger.info("Shutting down user service...");
             Promise.all([
+                closeMessaging()
             ]).catch((error: unknown) => {
                 logger.error({ error }, "Error shutting down auth service");
             }).finally(() => {
