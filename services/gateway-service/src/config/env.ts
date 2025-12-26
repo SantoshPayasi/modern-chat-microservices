@@ -8,6 +8,7 @@ const envSchema = z.object({
     AUTH_SERVICE_URL: z.string().url().default("http://localhost:4003"),
     USER_SERVICE_URL:z.string().url().default("http://localhost:4004"),
     INTERNAL_API_TOKEN: z.string().default("secret"),
+    JWT_SECRET:z.string().min(1)
 })
 
 type envType = z.infer<typeof envSchema>;

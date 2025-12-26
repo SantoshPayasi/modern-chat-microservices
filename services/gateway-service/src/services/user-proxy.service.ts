@@ -77,6 +77,30 @@ export const userProxyService = {
       } catch (error) {
         return handleAxiosError(error);
       }
+   },
+   createUsers: async(payload:CreateUserPayload):Promise<UserResponse>=>{
+    try {
+        const response = await client.post('/users', payload, authHeader);
+        return response.data;
+    } catch (error) {
+        return handleAxiosError(error);
+    }
+   },
+   seatchUsers: async(params:SearchUserParams):Promise<UserListResponse>=>{
+    try {
+            const response = await client.get('/users/search', {
+            headers:authHeader.headers,
+            params:{
+                query:params.query,
+                ...(params.limit ? {limit:params.limit}:{}),
+                ...(params.exclude? {exclude:params.exclude}:{})
+            }
+        })
+        return response.data;
+    } catch (error) {
+        return handleAxiosError(error);
+    }
+   
    }
 }
 

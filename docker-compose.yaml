@@ -25,6 +25,27 @@ services:
     networks:
       - chat-app-network
 
+  redis:
+    image: redis:7
+    container_name: chatapp-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    networks:
+      - chat-app-network
+
+  mongo:
+    image: mongo:7
+    container_name: chatapp-mongo
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-password}
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - chat-app-network
+
   auth-db:
     image: mysql:8.0
     container_name: chat-auth-db
@@ -43,6 +64,7 @@ services:
 
 volumes:
   auth-db-data:
+  mongo-data:
   user-db-data:
 
 
