@@ -2,11 +2,18 @@ import { createApp } from "@/app";
 import { createServer } from "http";
 import { env } from "./config/env";
 import { logger } from "./utils/logger";
+import { closeMongoClient, getMongoClient } from "./client/mongo.client";
+import { closeRedisClient, connectRedis } from "./client/redis.client";
+import { startConsumers, stopConsumers } from "./messaging/rabbitmq.consumer";
 
 
 const main = async () => {
     try {
-
+        await Promise.all([
+            getMongoClient(),
+            connectRedis(),
+            startConsumers()
+        ])
         const app = createApp();
         const server = createServer(app);
 
@@ -20,6 +27,9 @@ const main = async () => {
         const shutdown = async () => {
             logger.info("Shutting down chat service...");
             Promise.all([
+                closeMongoClient(),
+                closeRedisClient(),
+                stopConsumers()
             ]).catch((error: unknown) => {
                 logger.error({ error }, "Error shutting down chat service");
             }).finally(() => {
