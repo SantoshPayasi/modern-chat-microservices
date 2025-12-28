@@ -9,11 +9,16 @@ export const getMongoClient = async (): Promise<MongoClient> => {
         return client;
     }
 
-    const mongoUri = env.MONGO_URL;
-    client = new MongoClient(mongoUri);
-    await client.connect();
-    logger.info("MongoDB connection established");
-    return client;
+    try {
+        const mongoUri = env.MONGO_URL;
+        client = new MongoClient(mongoUri);
+        await client.connect();
+        logger.info("MongoDB connection established");
+        return client;
+    } catch (error) {
+        logger.error({ error }, "Error connecting to MongoDB");
+        throw error;
+    }
 }
 
 
