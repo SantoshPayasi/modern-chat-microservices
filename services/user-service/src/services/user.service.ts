@@ -26,10 +26,10 @@ class UserService {
             const user = await this.repository.create(data);
 
             void publishUserCreatedEvent({
-                id: user.email,
-                email:user.email,
-                createdAt:user.createdAt,
-                displayName:user.displayName
+                id: user.id,
+                email: user.email,
+                createdAt: user.createdAt,
+                displayName: user.displayName
             })
 
             return user;
@@ -55,12 +55,12 @@ class UserService {
 
     async syncFromAuthUser(payload: AuthUserRegisteredPayload): Promise<User> {
         const user = await this.repository.upsertFromAuthEvent(payload);
-         void publishUserCreatedEvent({
-                id: user.email,
-                email:user.email,
-                createdAt:user.createdAt,
-                displayName:user.displayName
-            })
+        void publishUserCreatedEvent({
+            id: user.id,
+            email: user.email,
+            createdAt: user.createdAt,
+            displayName: user.displayName
+        })
         return user;
     }
 }
